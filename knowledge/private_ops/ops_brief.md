@@ -3,6 +3,9 @@
 High-signal summary for quick operational questions.
 
 - total_jobs_snapshot: 25
+- pending_jobs_snapshot: 13
+- in_progress_jobs_snapshot: 0
+- complete_jobs_snapshot: 12
 - total_revenue_snapshot_usd: $19646.35
 - paid_revenue_snapshot_usd: $6022.95
 
@@ -13,6 +16,10 @@ High-signal summary for quick operational questions.
 - Alan Warner | SCHEDULED | Battery Add | updated 2026-06-08T12:58:58.959816+00:00
 - Claude Test | PENDING | General | updated 2026-05-14T20:43:14.647043+00:00
 - Mia Lopez | ON_HOLD | Inverter Replacement | updated 2026-05-14T19:30:57.990842+00:00
+
+## Latest Completed Job
+
+- Bailey Massey | Detach & Reinstall | 8008 Burly Wood Way, McDonough, GA 30253, USA | updated 2026-06-17T19:29:17.745723+00:00
 
 ## Top Recent Invoices
 

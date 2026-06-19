@@ -71,7 +71,8 @@ def import_training_examples(limit: int = 12) -> None:
 def main() -> int:
     import_quote_prompt()
     import_training_readme()
-    import_training_examples()
+    # Training examples are synthetic data — kept out of knowledge/ to prevent RAG hallucination.
+    # import_training_examples()  # disabled
     print(f"Wrote imported knowledge files to {KNOWLEDGE_DIR}")
     return 0
 
