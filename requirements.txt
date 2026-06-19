@@ -1,0 +1,2 @@
+# Pure stdlib — no pip packages required.
+# Python 3.11+ recommended.
