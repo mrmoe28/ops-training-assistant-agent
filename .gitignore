@@ -1,0 +1,29 @@
+# Byte-compiled / cached
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches
+.cache/
+*.cache
+
+# Virtual environments
+venv/
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+token*
+secrets*
+*_token*
+*_secret*
