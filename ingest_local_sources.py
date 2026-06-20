@@ -14,6 +14,7 @@ KNOWLEDGE_DIR = POC_DIR / "knowledge" / "imported"
 QUOTE_PROMPT = ROOT / "eko-ops-claude-project-prompt.md"
 TRAINING_README = ROOT / "solar-assistant-training" / "data" / "README.md"
 TRAINING_JSONL = ROOT / "solar-assistant-training" / "data" / "solar_training_data.jsonl"
+RATE_CARD = ROOT / "ollama-local-poc" / "knowledge" / "rate_card.md"
 
 
 def write_text(path: Path, text: str) -> None:
@@ -24,6 +25,11 @@ def write_text(path: Path, text: str) -> None:
 def import_quote_prompt() -> None:
     text = QUOTE_PROMPT.read_text(encoding="utf-8")
     write_text(KNOWLEDGE_DIR / "eko_ops_quote_prompt.md", text)
+
+
+def import_rate_card() -> None:
+    text = RATE_CARD.read_text(encoding="utf-8")
+    write_text(KNOWLEDGE_DIR / "rate_card.md", text)
 
 
 def import_training_readme() -> None:
@@ -70,6 +76,7 @@ def import_training_examples(limit: int = 12) -> None:
 
 def main() -> int:
     import_quote_prompt()
+    import_rate_card()
     import_training_readme()
     # Training examples are synthetic data — kept out of knowledge/ to prevent RAG hallucination.
     # import_training_examples()  # disabled
