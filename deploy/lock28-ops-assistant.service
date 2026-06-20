@@ -1,16 +1,17 @@
 [Unit]
 Description=Lock28 Ops Assistant
-After=network-online.target ollama.service
+After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
 WorkingDirectory=/opt/lock28-assistant
 EnvironmentFile=/opt/lock28-assistant/.env
+ExecStartPre=/bin/bash -c 'until curl -s http://127.0.0.1:11434/api/tags > /dev/null; do echo "Waiting for Ollama..."; sleep 2; done'
 ExecStart=/usr/bin/bash /opt/lock28-assistant/start_assistant.sh private
 Restart=always
-RestartSec=5
-User=root
+RestartSec=10
+User=mrmoe28
 
 [Install]
 WantedBy=multi-user.target
