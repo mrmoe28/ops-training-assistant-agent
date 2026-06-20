@@ -183,6 +183,18 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self) -> None:  # noqa: N802
+        if self.path in ("/", "/index.html"):
+            static_dir = Path(__file__).resolve().parent / "static"
+            index_path = static_dir / "index.html"
+            if index_path.exists():
+                body = index_path.read_bytes()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.send_header("Access-Control-Allow-Origin", ALLOWED_ORIGIN)
+                self.end_headers()
+                self.wfile.write(body)
+                return
         if self.path == "/health":
             self._send(
                 200,
