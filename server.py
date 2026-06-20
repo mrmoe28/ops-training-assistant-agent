@@ -182,8 +182,12 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.end_headers()
 
+    def _path(self) -> str:
+        return self.path.split("?", 1)[0].split("#", 1)[0]
+
     def do_GET(self) -> None:  # noqa: N802
-        if self.path in ("/", "/index.html"):
+        path = self._path()
+        if path in ("/", "/index.html"):
             static_dir = Path(__file__).resolve().parent / "static"
             index_path = static_dir / "index.html"
             if index_path.exists():
@@ -195,7 +199,7 @@ class Handler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(body)
                 return
-        if self.path == "/health":
+        if path == "/health":
             self._send(
                 200,
                 {
@@ -209,6 +213,7 @@ class Handler(BaseHTTPRequestHandler):
         self._send(404, {"error": "Not found"})
 
     def do_POST(self) -> None:  # noqa: N802
+        path = self._path()
         length = int(self.headers.get("Content-Length", "0"))
         raw = self.rfile.read(length) if length > 0 else b"{}"
         try:
@@ -217,7 +222,7 @@ class Handler(BaseHTTPRequestHandler):
             self._send(400, {"error": "Invalid JSON"})
             return
 
-        if self.path == "/chat":
+        if path == "/chat":
             question = str(payload.get("question", "")).strip()
             if not question:
                 self._send(400, {"error": "question is required"})
@@ -234,7 +239,7 @@ class Handler(BaseHTTPRequestHandler):
             self._send(200, result)
             return
 
-        if self.path == "/refresh":
+        if path == "/refresh":
             SERVICE.refresh()
             self._send(200, {"ok": True})
             return
