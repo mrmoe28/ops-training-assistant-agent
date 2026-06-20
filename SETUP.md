@@ -58,6 +58,39 @@ Server listens on `http://127.0.0.1:8008` by default.
 | `/chat` | POST | `{"question": "...", "history": [...], "context": {...}, "top_k": 4}` | `{reply, sources}` |
 | `/refresh` | POST | — | `{ok}` |
 
+## 5b. Remote Access via Cloudflare Tunnel
+
+The assistant is exposed externally at `https://ops-assistant.ekodevops.com` via the existing `supabase-clone` Cloudflare tunnel.
+
+To route a new subdomain through the tunnel:
+
+1. Add a DNS CNAME to the tunnel:
+   ```bash
+   cloudflared tunnel route dns c1960740-7e42-41ea-af2b-1e0958d1e325 ops-assistant.ekodevops.com
+   ```
+
+2. Update the managed tunnel config via Cloudflare API:
+   ```bash
+   curl -fsS \
+     -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+     -H "Content-Type: application/json" \
+     "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/cfd_tunnel/$TUNNEL_ID/configurations" \
+     -X PUT \
+     -d '{"config":{"ingress":[{"hostname":"admin.supabase.ekodevops.com","service":"http://192.168.50.105:3000"},{"hostname":"supabase.ekodevops.com","service":"http://192.168.50.105:54321"},{"hostname":"ops-assistant.ekodevops.com","service":"http://127.0.0.1:8008"},{"service":"http_status:404"}]}}'
+   ```
+
+3. Cloudflared pulls the new config within seconds.
+
+## 5c. Ops App Integration
+
+Set `VITE_LOCAL_ASSISTANT_URL=https://ops-assistant.ekodevops.com` in `eko-solar-ops-master/.env.local`.
+
+In the app, the `ChatWidget.tsx` toggles between two modes:
+- **App** mode: calls Supabase Edge Function for function-calling with live job/invoice data
+- **Ops** mode: sends queries to the local assistant at `VITE_LOCAL_ASSISTANT_URL`
+
+Rebuilding the ops app embeds the assistant into the floating AI widget so both modes are available on any device (desktop, phone, tablet).
+
 ## 6. Targeted Refresh
 
 ```bash
